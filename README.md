@@ -1,4 +1,4 @@
 amazon-api
 ==========
 
-API for buying stuff from Amazon
+API for authenticating and buying stuff from Amazon
