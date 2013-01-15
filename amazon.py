@@ -42,6 +42,9 @@ class AmazonSession:
 
     def goto_result(self, search_results, index):
         br.follow_link(search_results[index][1])
+
+    def lucky(self, key):
+        self.goto_result(self.search(key), 0)
         
     def turn_on_one_click(self):
         #link = self.br.find_link('oneClickSignInLinkID')
