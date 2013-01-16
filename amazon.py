@@ -93,6 +93,10 @@ class AmazonSession:
         price = soup.find('b', attrs = {'class': 'priceLarge'})[0].get_text()
         return price
 
+    def buy_result(self, results, index):
+        url = search_results[index][2]
+        self.buy(url)
+
     def buy(self, url):
         """Buy item at url."""    
         self._handle_buy(url)
@@ -103,7 +107,7 @@ class AmazonSession:
 
     def _handle_buy(self, url):
         """Handles transactions"""
-        if self.get_current_url != url:
+        if self.get_current_url() != url:
             self.br.open(url)
         self._turn_on_one_click()
         self.br.select_form(name='handleBuy')
