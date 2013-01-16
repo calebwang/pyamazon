@@ -40,6 +40,12 @@ class AmazonSession:
                 results = results + [(link.get_text(), link.get('href'))]
         return results 
 
+    def pretty_search(self, key):
+        results = self.search(key)
+        for entry in results:
+            print entry
+        return results
+
     def goto_result(self, search_results, index):
         br.follow_link(search_results[index][1])
 
