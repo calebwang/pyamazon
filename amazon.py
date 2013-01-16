@@ -53,7 +53,7 @@ class AmazonSession:
         """
         results = self.search(key)
         for key, entry in enumerate(results):
-            print key + ', ' + entry[0] + ', ' + entry[1]
+            print str(key) + ', ' + entry[0] + ', ' + entry[1]
         return results
 
     def view_result(self, search_results, index):
