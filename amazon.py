@@ -18,9 +18,9 @@ class AmazonSession:
         self.password = password
         self.br.open(url)
         self.br.follow_link(text_regex='sign in')
-        self.handle_login()
+        self._handle_login()
 
-    def handle_login(self):
+    def _handle_login(self):
         self.br.select_form(nr=0)
         self.br['email'] = self.email
         self.br['password'] = self.password
@@ -43,7 +43,7 @@ class AmazonSession:
     def goto_result(self, search_results, index):
         br.follow_link(search_results[index][1])
 
-    def lucky(self, key):
+    def lucky_search(self, key):
         self.goto_result(self.search(key), 0)
         
     def turn_on_one_click(self):
@@ -51,24 +51,22 @@ class AmazonSession:
         link = self.br.find_link(text='Sign in')
         if link:
             self.br.follow_link(link)
-            self.redirect()
+            self._redirect()
 
-    def redirect(self):
-            link = self.br.find_link(url_regex = 'http://www.amazon.com/gp/redirect*', nr = 1)
+    def _redirect(self):
+            link = self.br.find_link(url_regex = 'http://www.amazon.com/gp/_redirect*', nr = 1)
             if link:
                 self.br.follow_link(link)
             else:
-                self.handle_login()
-                self.redirect()
+                self._handle_login()
+                self._redirect()
 
     def get_price(self, url):    
-        page = self.br.open(url).read()
-        soup = BeautifulSoup(page)
-        price = soup.find('b', attrs = {'class': 'priceLarge'})[0].get_text()
-        self.br.back()
+        self.br.open(url)
+        price = self._price_this() 
         return price 
 
-    def price_this(self):
+    def _price_this(self):
         page = self.br.response().read()
         soup = BeautifulSoup(page)
         price = soup.find('b', attrs = {'class': 'priceLarge'})[0].get_text()
@@ -76,17 +74,15 @@ class AmazonSession:
 
     def buy(self, url):
         """Buy item at url."""    
-        self.br.open(url)
-        self.buy_this()
-        self.br.back()
+        self._handle_buy(url)
 
     def buy_this(self):
         """Call this if self.br is viewing a product"""  
-        self.handle_buy(self.get_current_link())
+        self._handle_buy(self.get_current_link())
 
-    def handle_buy(self, link):
-        if self.get_current_link != link:
-            self.br.open(link)
+    def _handle_buy(self, url):
+        if self.get_current_url != url:
+            self.br.open(url)
         self.turn_on_one_click()
         self.br.select_form(name='handleBuy')
         try:
