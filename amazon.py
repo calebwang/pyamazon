@@ -61,14 +61,33 @@ class AmazonSession:
                 self.handle_login()
                 self.redirect()
 
-    
-    def buy_current(self):
+    def get_price(self, url):    
+        page = self.br.open(url).read()
+        soup = BeautifulSoup(page)
+        price = soup.find('b', attrs = {'class': 'priceLarge'})[0].get_text()
+        self.br.back()
+        return price 
+
+    def price_this(self):
+        page = self.br.response().read()
+        soup = BeautifulSoup(page)
+        price = soup.find('b', attrs = {'class': 'priceLarge'})[0].get_text()
+        return price
+
+    def buy(self, url):
+        """Buy item at url."""    
+        self.br.open(url)
+        self.buy_this()
+        self.br.back()
+
+    def buy_this(self):
         """Call this if self.br is viewing a product"""  
         self.handle_buy(self.get_current_link())
 
     def handle_buy(self, link):
         if self.get_current_link != link:
             self.br.open(link)
+        self.turn_on_one_click()
         self.br.select_form(name='handleBuy')
         try:
             req = self.br.form.click(id='oneClickBuyButton')
