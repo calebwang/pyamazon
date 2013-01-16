@@ -54,7 +54,7 @@ class AmazonSession:
         """
         results = self.search(key)
         for entry in results:
-            print entry[0], entry[1]
+            print entry[0] + ', ' + entry[1]
         return results
 
     def view_result(self, search_results, index):
