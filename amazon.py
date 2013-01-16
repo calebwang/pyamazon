@@ -1,7 +1,6 @@
 import mechanize
 from bs4 import BeautifulSoup
 
-
 class AmazonSession:
 
     def __init__(self):
@@ -53,8 +52,8 @@ class AmazonSession:
         Omits url when displaying results.
         """
         results = self.search(key)
-        for entry in results:
-            print entry[0] + ', ' + entry[1]
+        for key, entry in enumerate(results):
+            print key + ', ' + entry[0] + ', ' + entry[1]
         return results
 
     def view_result(self, search_results, index):
