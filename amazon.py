@@ -45,19 +45,21 @@ class AmazonSession:
             if link:
                 href = link.get('href') 
                 price = soup.find_all(attrs = {'href': href})[2].span.get_text().strip()
-                results = results + [(link.get_text(), href, price)]
+                results = results + [(link.get_text(), price, href)]
         return results
 
     def pretty_search(self, key):
-        """Searches, prints pretty list of search results"""
+        """Searches, prints pretty list of search results.
+        Omits url when displaying results.
+        """
         results = self.search(key)
         for entry in results:
-            print entry
+            print entry[0], entry[1]
         return results
 
     def view_result(self, search_results, index):
         """Look at result from search result list"""
-        br.follow_link(search_results[index][1])
+        br.follow_link(search_results[index][2])
 
     def lucky_search(self, key):
         """Immediately go to first result for search term"""
@@ -82,10 +84,10 @@ class AmazonSession:
 
     def get_price(self, url):    
         self.br.open(url)
-        price = self._price_this() 
+        price = self.price_this() 
         return price 
 
-    def _price_this(self):
+    def price_this(self):
         """Gets price of item that session is currently looking at"""
         page = self.br.response().read()
         soup = BeautifulSoup(page)
